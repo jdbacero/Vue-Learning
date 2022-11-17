@@ -5,6 +5,8 @@ import EventDetails from "@/views/event/Details"
 import EventLayout from "@/views/event/Layout"
 import EventEdit from "@/views/event/Edit"
 import EventRegister from "@/views/event/Register"
+import NotFound from "@/views/NotFound"
+import NetworkError from "@/views/NetworkError"
 
 const routes = [
   {
@@ -73,6 +75,22 @@ const routes = [
   //     return { name: 'EventDetails', params: { id: to.params.id } }
   //   }
   // },
+  {
+    path: '/:catchAll(.*)',
+    name: 'NotFound',
+    component: NotFound
+  },
+  {
+    path: '/404/:resource',
+    name: '404Resource',
+    component: NotFound,
+    props: true
+  },
+  {
+    path: '/network-error',
+    name: 'NetworkError',
+    component: NetworkError,
+  }
 ];
 
 const router = createRouter({
