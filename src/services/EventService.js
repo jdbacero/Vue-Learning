@@ -8,8 +8,8 @@ const apiClient = axios.create({
     },
 });
 
-const getEvents = () => {
-    return apiClient.get("/")
+const getEvents = (perPage, page) => {
+    return apiClient.get(`?_limit=${perPage}&_page=${page}`)
 };
 
 const getEvent = (id) => {

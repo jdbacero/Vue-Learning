@@ -31,6 +31,16 @@
         "organizer": "Carey Wales"
       },
       {
+        "id": 1231,
+        "category": "study",
+        "title": "Learn More About Vue",
+        "description": "Study Vue, the next big thing after React.",
+        "location": "Cyber Space",
+        "date": "Now",
+        "time": "ASAP",
+        "organizer": "Jorex Bacero"
+      },
+      {
         "id": 1011,
         "category": "mental welfare",
         "title": "UwU Hewoo",
