@@ -5,6 +5,26 @@
 
 <script>
 export default {
-  props: ['event']
+  props: ['event'],
+  data() {
+    return {
+      unsavedChanges: false
+    }
+  },
+  beforeRouteLeave(routeTo, routeFrom, next) {
+    if(this.unsavedChanges) {
+      const confirm = window.confirm(
+        'Are you sure you want to leave? You have unsaved changes.'
+      )
+
+      if(confirm) {
+        next()
+      } else {
+        next(false)
+      }
+    } else {
+      next()
+    }
+  }   
 };
 </script>

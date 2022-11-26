@@ -25,7 +25,8 @@
 // @ is an alias to /src
 import EventCard from "@/components/EventCard.vue";
 import EventService from "@/services/EventService";
-import { watchEffect } from "vue";
+import NProgress from 'nprogress'
+// import { watchEffect } from "vue";
 export default {
   props: ['page'],
   name: "EventListView",
@@ -41,21 +42,48 @@ export default {
   },
 
   created() {
-    watchEffect(() => {
-      this.events = null
-      EventService.getEvents(2, this.page).then((events) => {
-       this.events = events.data;
-       this.totalEvents = events.headers['x-total-count']
-       console.log(this.events)
-     }).catch(error => {
-       console.log(error)
-       this.$router.push({
-        name: 'NetworkError'
-       })
-     });
+    // watchEffect(() => {
+    //   this.events = null
+    //   EventService.getEvents(2, this.page).then((events) => {
+    //    this.events = events.data;
+    //    this.totalEvents = events.headers['x-total-count']
+    //    console.log(this.events)
+    //  }).catch(error => {
+    //    console.log(error)
+    //    this.$router.push({
+    //     name: 'NetworkError'
+    //    })
+    //  });
+    // })
+  },
+  beforeRouteEnter(routeTo, routeFrom, next) {
+    NProgress.start()
+    EventService.getEvents(2, parseInt(routeTo.query.page)).then((events) => {
+      next(component => {
+        component.events = events.data;
+        component.totalEvents = events.headers['x-total-count']
+        console.log(component.events)
+      })
+    }).catch(error => {
+      console.log(error)
+      next({name: 'NetworkError'})
+    }).finally(() => {
+      NProgress.done()
     })
   },
-
+  beforeRouteUpdate(routeTo) {
+    NProgress.start()
+    EventService.getEvents(2, parseInt(routeTo.query.page)).then((events) => {
+        this.events = events.data;
+        this.totalEvents = events.headers['x-total-count']
+        console.log(this.events)
+    }).catch(error => {
+      console.log(error)
+      return {name: 'NetworkError'}
+    }).finally(() => {
+      NProgress.done()
+    })
+  },
   computed: {
     hasNextPage() {
       return this.page < this.numberOfPages
