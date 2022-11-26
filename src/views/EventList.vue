@@ -25,7 +25,7 @@
 // @ is an alias to /src
 import EventCard from "@/components/EventCard.vue";
 import EventService from "@/services/EventService";
-import NProgress from 'nprogress'
+// import NProgress from 'nprogress'
 // import { watchEffect } from "vue";
 export default {
   props: ['page'],
@@ -57,7 +57,7 @@ export default {
     // })
   },
   beforeRouteEnter(routeTo, routeFrom, next) {
-    NProgress.start()
+    // NProgress.start()
     EventService.getEvents(2, parseInt(routeTo.query.page)).then((events) => {
       next(component => {
         component.events = events.data;
@@ -68,12 +68,12 @@ export default {
       console.log(error)
       next({name: 'NetworkError'})
     }).finally(() => {
-      NProgress.done()
+      // NProgress.done()
     })
   },
   beforeRouteUpdate(routeTo) {
-    NProgress.start()
-    EventService.getEvents(2, parseInt(routeTo.query.page)).then((events) => {
+    // NProgress.start()
+    return EventService.getEvents(2, parseInt(routeTo.query.page)).then((events) => {
         this.events = events.data;
         this.totalEvents = events.headers['x-total-count']
         console.log(this.events)
@@ -81,7 +81,7 @@ export default {
       console.log(error)
       return {name: 'NetworkError'}
     }).finally(() => {
-      NProgress.done()
+      // NProgress.done()
     })
   },
   computed: {
