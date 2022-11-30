@@ -9,7 +9,8 @@ import NotFound from "@/views/NotFound"
 import NetworkError from "@/views/NetworkError"
 import NProgress from "nprogress";
 import EventService from '@/services/EventService';
-import GStore from '@/store'
+import { useEventStore } from "@/store/EventStore";
+import { useGStore } from "@/store/GStore";
 
 const About = () => import(/* webpackChunkName: "about" */ '@/views/AboutView')
 
@@ -39,7 +40,7 @@ const routes = [
     beforeEnter: to => {
       return EventService.getEvent(to.params.id)
         .then(event => {
-          GStore.event = event.data
+          useEventStore().event = event.data
         })
         .catch(error => {
           if (error.response && error.response.status == 404) {
@@ -132,14 +133,10 @@ const router = createRouter({
 
 router.beforeEach((to, from) => {
   NProgress.start()
-
+  const GStore = useGStore()
   const notAuthorized = true
   if (notAuthorized && to.meta.requireAuth) {
-    GStore.flashMessage = "Sorry, you are not authorized to view this page."
-
-    setTimeout(() => {
-      GStore.flashMessage = ''
-    }, 3000)
+    GStore.showMessage("Sorry, you are not authorized to view this page.")
 
     if (from.href) {
       return false

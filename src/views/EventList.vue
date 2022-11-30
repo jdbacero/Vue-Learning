@@ -2,7 +2,7 @@
   <h1>Apps for Good</h1>
   <div class="events">
     <!-- <img alt="Vue logo" src="../assets/logo.png" /> -->
-    <EventCard v-for="event in events" :key="event.id" :event="event" />
+    <EventCard v-for="event in eventStore.events" :key="event.id" :event="event" />
 
     <router-link
       :to="{name: 'EventList', query: {page: page-1} }"
@@ -25,6 +25,7 @@
 // @ is an alias to /src
 import EventCard from "@/components/EventCard.vue";
 import EventService from "@/services/EventService";
+import { useEventStore } from "@/store/EventStore";
 // import NProgress from 'nprogress'
 // import { watchEffect } from "vue";
 export default {
@@ -33,7 +34,13 @@ export default {
   components: {
     EventCard,
   },
+  setup() {
+    const eventStore = useEventStore()
 
+    return {
+      eventStore
+    }
+  },
   data() {
     return {
       events: [],
@@ -42,25 +49,12 @@ export default {
   },
 
   created() {
-    // watchEffect(() => {
-    //   this.events = null
-    //   EventService.getEvents(2, this.page).then((events) => {
-    //    this.events = events.data;
-    //    this.totalEvents = events.headers['x-total-count']
-    //    console.log(this.events)
-    //  }).catch(error => {
-    //    console.log(error)
-    //    this.$router.push({
-    //     name: 'NetworkError'
-    //    })
-    //  });
-    // })
   },
   beforeRouteEnter(routeTo, routeFrom, next) {
     // NProgress.start()
     EventService.getEvents(2, parseInt(routeTo.query.page)).then((events) => {
       next(component => {
-        component.events = events.data;
+        component.eventStore.events = events.data;
         component.totalEvents = events.headers['x-total-count']
         console.log(component.events)
       })
@@ -74,7 +68,7 @@ export default {
   beforeRouteUpdate(routeTo) {
     // NProgress.start()
     return EventService.getEvents(2, parseInt(routeTo.query.page)).then((events) => {
-        this.events = events.data;
+        this.eventStore.events = events.data;
         this.totalEvents = events.headers['x-total-count']
         console.log(this.events)
     }).catch(error => {

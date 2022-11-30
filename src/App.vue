@@ -9,10 +9,9 @@
   <router-view />
 </template>
 
-<script>
-export default {
-  inject: ['GStore']
-}
+<script setup>
+import { useGStore } from './store/GStore';
+const GStore = useGStore()
 </script>
 
 <style>

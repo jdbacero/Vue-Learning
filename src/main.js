@@ -1,8 +1,12 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
-import GStore from "./store";
-import 'nprogress/nprogress.css'
+// import GStore from "./store";
 import { createPinia } from 'pinia'
+import 'nprogress/nprogress.css'
 
-createApp(App).use(router).use(createPinia()).provide('GStore', GStore).mount("#app");
+const app = createApp(App)
+
+app.use(createPinia())
+app.use(router)
+app.mount("#app");

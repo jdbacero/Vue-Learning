@@ -5,19 +5,20 @@
 </template>
 
 <script>
+import { useGStore } from '@/store/GStore';
 export default {
+  setup() {
+    const GStore = useGStore()
+    return {
+      GStore
+    }
+  },
   props: ['event'],
-  inject: ['GStore'],
   methods: {
     register() {
       // Call API
       // Assume API call worked.
-
-      this.GStore.flashMessage = `You are successfully registered for ${this.event.title}`
-
-      setTimeout(() => {
-        this.GStore.flashMessage = ''
-      }, 3000)
+      this.GStore.showMessage(`You are successfully registered for ${this.event.title}`)
 
       this.$router.push({
         name: 'EventDetails',
